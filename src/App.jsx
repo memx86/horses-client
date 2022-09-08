@@ -1,7 +1,16 @@
 import { useState, useEffect } from "react";
 import io from "socket.io-client";
+import styled from "styled-components";
+
+import HorseOnTrack from "./components/HorseOnTrack";
 
 const socket = io("localhost:3002/");
+
+const Stadium = styled.ul`
+  padding: 20px;
+  border: 1px solid #222;
+`;
+
 const App = () => {
   const [isConnected, setIsConnected] = useState(socket.connected);
   const [horses, setHorses] = useState([]);
@@ -35,15 +44,14 @@ const App = () => {
       <button type="button" onClick={handleStart}>
         Start
       </button>
-      {isConnected && (
-        <ul>
-          {horses.map(({ name, distance }) => (
-            <li key={name}>
-              <p>{name}</p>
-              <p>{distance}</p>
+      {isConnected && !!horses.length && (
+        <Stadium>
+          {horses.map((horse) => (
+            <li key={horse.name}>
+              <HorseOnTrack horse={horse} />
             </li>
           ))}
-        </ul>
+        </Stadium>
       )}
     </div>
   );
